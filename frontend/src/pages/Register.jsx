@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 
 const Register = () => {
+    const navigate = useNavigate();
+
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -28,6 +30,10 @@ const Register = () => {
 
             const data = await response.data;
             console.log(data);
+
+            setTimeout(() => {
+                navigate('/login');
+            }, 2000);
 
         } catch (error) {
             console.log(error);
