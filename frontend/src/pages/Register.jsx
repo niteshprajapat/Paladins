@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+
 
 
 const Register = () => {
@@ -31,12 +33,33 @@ const Register = () => {
             const data = await response.data;
             console.log(data);
 
+            toast.success(data?.message, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "dark",
+            });
+
             setTimeout(() => {
                 navigate('/login');
             }, 2000);
 
         } catch (error) {
-            console.log(error);
+            console.log(error?.response?.data?.message);
+            toast.error(error?.response?.data?.message, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "dark",
+            });
         }
     }
 
