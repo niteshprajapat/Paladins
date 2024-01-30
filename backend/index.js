@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import connectDB from './config/database.js';
 import authRoutes from './routes/authRoutes.js';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
+
 dotenv.config();
 
 
@@ -18,6 +20,11 @@ connectDB();
 // Middlewares
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({
+    origin: [process.env.FRONTEND_URL],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+}))
 app.use('/api/v1/auth', authRoutes);
 
 
