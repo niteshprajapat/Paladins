@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import GoogleAuth from '../components/GoogleAuth';
 
 
 
@@ -102,6 +103,12 @@ const Register = () => {
                     <div className='mt-5'>
                         <button className='w-[95%]  border border-gray-900 bg-gradient-to-r from-[#111]  via-[#161616] to-[#111]  text-white/65 hover:text-white/80 py-[7px] px-4 text-[13px]  rounded-md hover:opacity-90'>Register Now</button>
                     </div>
+
+                    <span className='border border-gray-50/5 w-[95%] mx-auto'></span>
+
+                    <GoogleAuth />
+
+
                 </form>
 
                 <div className='mt-5 flex justify-center items-center gap-2'>
