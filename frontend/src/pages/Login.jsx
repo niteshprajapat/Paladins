@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../redux/slices/userSlice';
+import GoogleAuth from '../components/GoogleAuth';
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -96,6 +97,10 @@ const Login = () => {
                     <div className='mt-5'>
                         <button className='w-[95%]  border border-gray-900 bg-gradient-to-r from-[#111]  via-[#161616] to-[#111]  text-white/65 hover:text-white/80 py-[7px] px-4 text-[13px]  rounded-md hover:opacity-90'>Login Now</button>
                     </div>
+
+                    <span className='border border-gray-50/5 w-[95%] mx-auto'></span>
+
+                    <GoogleAuth />
                 </form>
 
                 <div className='mt-5 flex justify-center items-center gap-2'>
