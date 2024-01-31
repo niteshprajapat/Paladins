@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    profilePicture: {
+        type: String,
+        default: "https://e7.pngegg.com/pngimages/773/168/png-clipart-pokemon-pikachu-illustration-pokemon-go-pokemon-yellow-pikachu-ash-ketchum-pikachu-mammal-vertebrate-thumbnail.png",
+    }
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
