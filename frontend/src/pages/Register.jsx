@@ -78,6 +78,7 @@ const Register = () => {
                             className='w-[95%] py-[7px] px-4 text-sm text-white placeholder:text-white/65 placeholder:text-xs bg-[#111] rounded border border-[#111]  focus:outline-none'
                         />
                     </div>
+
                     <div>
                         <input
                             value={email}
@@ -87,6 +88,7 @@ const Register = () => {
                             className='w-[95%] py-[7px] px-4 text-sm text-white placeholder:text-white/65 placeholder:text-xs bg-[#111] rounded border border-[#111]  focus:outline-none'
                         />
                     </div>
+
                     <div>
                         <input
                             value={password}
