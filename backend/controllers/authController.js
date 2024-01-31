@@ -90,3 +90,58 @@ export const login = async (req, res) => {
 }
 
 
+// Google
+export const google = async (req, res) => {
+    try {
+        const { name, email, photo } = req.body;
+
+        const user = await User.findOne({ email });
+
+        if (user) {
+            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+
+            const { password: hashedPassword, ...rest } = user._doc;
+
+            return res.status(200).cookie("token", token, {
+                httpOnly: true,
+                expires: new Date(Date.now() + 2 * 60 * 1000)
+            }).json({
+                success: true,
+                message: "loggedIn with Google",
+                rest,
+            });
+
+        } else {
+
+            const generatePassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            const hashedPassword = await bcrypt.hash(generatePassword, 10);
+
+            const newUser = new User({
+                username: name.split(" ").join("").toLowerCase() + Math.random().toString(36).slice(-8),
+                email: email,
+                password: hashedPassword,
+                profilePicture: photo,
+            });
+
+            await newUser.save();
+
+            const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+            const { password: securePassword, ...rest } = newUser._doc;
+
+            return res.status(200).cookie("token", token, {
+                httpOnly: true,
+                expires: new Date(Date.now() + 2 * 60 * 1000)
+            }).json({
+                success: true,
+                message: "registered with Google",
+                rest,
+            });
+        }
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error,
+        })
+    }
+}
