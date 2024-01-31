@@ -2,9 +2,12 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
+import { useDispatch } from 'react-redux';
+import { registerUser } from '../redux/slices/userSlice';
 
 const Login = () => {
+    const dispatch = useDispatch();
+
     const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
@@ -27,6 +30,8 @@ const Login = () => {
 
             const data = await response.data;
             console.log(data);
+
+            dispatch(registerUser(data));
 
             toast.success(data?.message, {
                 position: "top-center",
@@ -102,4 +107,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Login;
