@@ -1,14 +1,70 @@
-import React, { useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { app } from '../firebase';
+import { updateUser } from '../redux/slices/userSlice';
+import axios from 'axios';
 
 
 const Profile = () => {
+    const dispatch = useDispatch();
+
     const { currentUser } = useSelector((store) => store.user);
+
     const fileRef = useRef(null);
     const [image, setImage] = useState(undefined);
+
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [profilePicture, setProfilePicture] = useState(undefined);
+
+    const [imagePercentage, setImagePercentage] = useState(0);
+    const [imageError, setImageError] = useState(false);
+
+
+    useEffect(() => {
+        if (image) {
+            handleFileUpload(image);
+        }
+    }, [image])
+
+
+    const handleFileUpload = async (image) => {
+        const storage = getStorage(app);
+        const fileName = new Date().getTime() + image.name;
+        const storageRef = ref(storage, fileName);
+        const uploadTask = uploadBytesResumable(storageRef, image);
+
+        uploadTask.on(
+            'state_changed',
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                setImagePercentage(Math.round(progress));
+            },
+            (error) => {
+                setImageError(true);
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) =>
+                    setProfilePicture(downloadUrl)
+                )
+            }
+        )
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+
+            const response = await 
+
+
+        } catch (error) {
+            console.log("error while updating user profile");
+        }
+    }
 
     return (
         <div className='w-full h-screen bg-black/[0.99] p-20'>
@@ -16,7 +72,7 @@ const Profile = () => {
 
                 <h1 className='text-center text-white text-3xl  mb-5'>User Profile</h1>
 
-                <form className='flex flex-col gap-6 mt-5'>
+                <form onSubmit={handleSubmit} className='flex flex-col gap-6 mt-5'>
                     <div className='self-center'>
                         <input
                             onChange={(e) => setImage(e.target.files[0])}
@@ -25,8 +81,9 @@ const Profile = () => {
 
                         <img
                             onClick={() => fileRef.current.click()}
+
                             className='w-[70px] h-[70px] rounded-full object-cover'
-                            src={currentUser?.rest?.profilePicture}
+                            src={profilePicture || currentUser?.user?.profilePicture}
                             alt="profilepicture"
                         />
                     </div>
