@@ -108,7 +108,7 @@ export const google = async (req, res) => {
             }).json({
                 success: true,
                 message: "loggedIn with Google",
-                rest,
+                user: rest,
             });
 
         } else {
@@ -134,7 +134,7 @@ export const google = async (req, res) => {
             }).json({
                 success: true,
                 message: "registered with Google",
-                rest,
+                user: rest,
             });
         }
 
