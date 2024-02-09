@@ -1,9 +1,15 @@
 import React from 'react';
 import { FaShieldAlt } from "react-icons/fa";
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 
+
+
 const Header = () => {
+    const { currentUser } = useSelector((store) => store.user);
+    console.log("currentUser -> ", currentUser);
+
     return (
         <div className=' w-full bg-black text-white fixed z-30 shadow-md p-5'>
             <div className='flex justify-between items-center w-[1200px] mx-auto'>
@@ -15,8 +21,18 @@ const Header = () => {
                 </div>
                 <div className='flex items-center gap-10'>
                     <Link to={"/"}>Home</Link>
-                    <Link to={"/register"}>Register</Link>
-                    <Link to={"/login"}>Login</Link>
+                    {/* <Link to={"/register"}>Register</Link>
+                    <Link to={"/login"}>Login</Link> */}
+
+                    <Link to={"/profile"}>
+                        {
+                            currentUser ? (
+                                <img className='w-9 h-9 rounded-full object-cover' src={currentUser?.rest?.profilePicture} alt="profilepicture" />
+                            ) : (
+                                <p>Login</p>
+                            )
+                        }
+                    </Link>
                 </div>
             </div>
         </div>
