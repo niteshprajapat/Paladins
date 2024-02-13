@@ -4,9 +4,12 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../firebase';
 import { updateUser } from '../redux/slices/userSlice';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 
 const Profile = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const { currentUser } = useSelector((store) => store.user);
@@ -58,11 +61,51 @@ const Profile = () => {
 
         try {
 
-            // const response = await 
+            const response = await axios.put(`http://localhost:5000/api/v1/user/update/${currentUser?.user?._id}`, {
+                username,
+                email,
+                password,
+                profilePicture,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true,
+            });
 
+            const data = await response.data;
+            console.log('Update -> ', data);
+
+            dispatch(updateUser(data));
+
+            toast.success(data?.message, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "dark",
+            });
+
+            setTimeout(() => {
+                navigate('/');
+            }, 2000);
 
         } catch (error) {
             console.log("error while updating user profile");
+            console.log(error?.response?.data?.message);
+            toast.error(error?.response?.data?.message, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "dark",
+            });
         }
     }
 
@@ -86,7 +129,22 @@ const Profile = () => {
                             src={profilePicture || currentUser?.user?.profilePicture}
                             alt="profilepicture"
                         />
+
+                        <p className='text-sm '>
+                            {
+                                imageError ? (
+                                    <span className='text-red-700'>Error uploading image (file size must be less than 2 MB)</span>
+                                ) : imagePercentage > 0 && imagePercentage < 100 ? (
+                                    <span >{`Uploading: ${imagePercentage} %`}</span>
+                                ) : imagePercentage === 100 ? (
+                                    <span className='text-green-700'>Image uploaded successfully.</span>
+                                ) : (
+                                    ''
+                                )
+                            }
+                        </p>
                     </div>
+
                     <div>
                         <input
                             onChange={(e) => setUsername(e.target.value)}
@@ -125,4 +183,4 @@ const Profile = () => {
     )
 }
 
-export default Profile
+export default Profile;
