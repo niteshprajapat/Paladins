@@ -148,7 +148,7 @@ export const google = async (req, res) => {
 
 
 // Signout
-export const signout = async (req, res) => {
+export const logout = async (req, res) => {
     try {
         return res.status(200).cookie('token', '', {
             httpOnly: true,
