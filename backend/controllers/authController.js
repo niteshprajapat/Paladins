@@ -145,3 +145,23 @@ export const google = async (req, res) => {
         })
     }
 }
+
+
+// Signout
+export const signout = async (req, res) => {
+    try {
+        return res.status(200).cookie('token', '', {
+            httpOnly: true,
+            expires: new Date(Date.now()),
+        }).json({
+            success: true,
+            message: 'User loggedOut successfully.',
+        })
+
+    } catch (error) {
+        return res.status(404).json({
+            success: false,
+            message: error.message,
+        })
+    }
+}
