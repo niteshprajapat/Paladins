@@ -110,8 +110,29 @@ const Profile = () => {
     }
 
 
-    const handleDeleteAccount = () => {
+    const handleDeleteAccount = async (e) => {
+        try {
 
+            const response = await axios.delete(`http://localhost:5000/api/v1/user/delete/${currentUser?.user?._id}`);
+            const data = await response.data;
+            console.log('delete user -> ', data);
+
+            // dispatch()
+
+        } catch (error) {
+            console.log("error while deleting user account.");
+            console.log(error?.response?.data?.message);
+            toast.error(error?.response?.data?.message, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "dark",
+            });
+        }
     }
 
     const handleSignout = async (e) => {
@@ -121,7 +142,7 @@ const Profile = () => {
             const data = await response.data;
             console.log(data);
 
-            // dispatch()
+            dispatch(logoutUser());
 
             toast.success(data?.message, {
                 position: "top-center",
