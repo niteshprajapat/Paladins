@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
-import { updateUser } from '../redux/slices/userSlice';
+import { updateUser, logoutUser, deleteUser } from '../redux/slices/userSlice';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -61,7 +61,7 @@ const Profile = () => {
 
         try {
 
-            const response = await axios.put(`http://localhost:5000/api/v1/user/update/${currentUser?.user?._id}`, {
+            const response = await axios.post(`http://localhost:5000/api/v1/user/update/${currentUser?.user?._id}`, {
                 username,
                 email,
                 password,
@@ -109,6 +109,53 @@ const Profile = () => {
         }
     }
 
+
+    const handleDeleteAccount = () => {
+
+    }
+
+    const handleSignout = async (e) => {
+        try {
+
+            const response = await axios.get('http://localhost:5000/api/v1/auth/logout');
+            const data = await response.data;
+            console.log(data);
+
+            // dispatch()
+
+            toast.success(data?.message, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "dark",
+            });
+
+            setTimeout(() => {
+                navigate('/')
+            }, 2000);
+
+
+
+        } catch (error) {
+            console.log("error while logging out user.");
+            console.log(error?.response?.data?.message);
+            toast.error(error?.response?.data?.message, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "dark",
+            });
+        }
+    }
+
     return (
         <div className='w-full h-screen bg-black/[0.99] p-20'>
             <div className='w-[30%] mx-auto mt-8 text-white'>
@@ -116,7 +163,7 @@ const Profile = () => {
                 <h1 className='text-center text-white text-3xl  mb-5'>User Profile</h1>
 
                 <form onSubmit={handleSubmit} className='flex flex-col gap-6 mt-5'>
-                    <div className='self-center'>
+                    <div className='flex  flex-col items-center'>
                         <input
                             onChange={(e) => setImage(e.target.files[0])}
                             ref={fileRef} type="file" hidden accept='image/*'
@@ -175,9 +222,16 @@ const Profile = () => {
                     </div>
 
                     <div className='mt-5'>
-                        <button className='w-[95%]  border border-gray-900 bg-gradient-to-r from-[#111]  via-[#161616] to-[#111]  text-white/65 hover:text-white/80 py-[7px] px-4 text-[13px]  rounded-md hover:opacity-90'>Update Details</button>
+                        <button className='w-[95%]  border border-gray-900 bg-gradient-to-r from-[#111]  via-[#161616] to-[#111]  text-white/65 hover:text-white/80 py-[7px] px-4 text-[13px]  rounded-md hover:opacity-90'>
+                            Update Details
+                        </button>
                     </div>
                 </form>
+
+                <div className='mt-8 text-sm flex justify-between  w-[95%]'>
+                    <button onClick={handleDeleteAccount} type='button' className='p-2 bg-red-700 rounded hover:bg-red-600 transition-all duration-150 ease-linear'>Delete Account</button>
+                    <button onClick={handleSignout} type='button' className='p-2 bg-red-700 rounded hover:bg-red-600 transition-all duration-150 ease-linear'>Sign Out</button>
+                </div>
             </div>
         </div>
     )
