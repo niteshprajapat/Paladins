@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 
 const Header = () => {
     const { currentUser } = useSelector((store) => store.user);
-    console.log("currentUser -> ", currentUser);
 
     return (
         <div className=' w-full bg-black text-white fixed z-30 shadow-md p-5'>
@@ -27,7 +26,7 @@ const Header = () => {
                     <Link to={"/profile"}>
                         {
                             currentUser ? (
-                                <img className='w-9 h-9 rounded-full object-cover' src={currentUser?.rest?.profilePicture} alt="profilepicture" />
+                                <img className='w-9 h-9 rounded-full object-cover' src={currentUser?.user?.profilePicture || currentUser?.rest?.profilePicture} alt="profilepicture" />
                             ) : (
                                 <p>Login</p>
                             )
