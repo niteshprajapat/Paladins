@@ -61,7 +61,7 @@ const Profile = () => {
 
         try {
 
-            const response = await axios.post(`http://localhost:5000/api/v1/user/update/${currentUser?.user?._id}`, {
+            const response = await axios.put(`http://localhost:5000/api/v1/user/update/${currentUser?.user?._id}`, {
                 username,
                 email,
                 password,
@@ -113,11 +113,31 @@ const Profile = () => {
     const handleDeleteAccount = async (e) => {
         try {
 
-            const response = await axios.delete(`http://localhost:5000/api/v1/user/delete/${currentUser?.user?._id}`);
+            const response = await axios.delete(`http://localhost:5000/api/v1/user/delete/${currentUser?.user?._id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true,
+            });
             const data = await response.data;
             console.log('delete user -> ', data);
 
-            // dispatch()
+            dispatch(deleteUser());
+
+            toast.success(data?.message, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "dark",
+            });
+
+            setTimeout(() => {
+                navigate('/register')
+            }, 2000);
 
         } catch (error) {
             console.log("error while deleting user account.");
