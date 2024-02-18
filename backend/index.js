@@ -6,11 +6,13 @@ import userRoutes from './routes/userRoutes.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
-dotenv.config();
+dotenv.config({
+    path: '.env'
+});
 
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT;
 
 
 
