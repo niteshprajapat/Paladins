@@ -61,7 +61,7 @@ const Profile = () => {
 
         try {
 
-            const response = await axios.put(`http://localhost:5000/api/v1/user/update/${currentUser?.user?._id}`, {
+            const response = await axios.put(`https://paladins-hry5.onrender.com/api/v1/user/update/${currentUser?.user?._id}`, {
                 username,
                 email,
                 password,
@@ -113,7 +113,7 @@ const Profile = () => {
     const handleDeleteAccount = async (e) => {
         try {
 
-            const response = await axios.delete(`http://localhost:5000/api/v1/user/delete/${currentUser?.user?._id}`, {
+            const response = await axios.delete(`https://paladins-hry5.onrender.com/api/v1/user/delete/${currentUser?.user?._id}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -158,7 +158,7 @@ const Profile = () => {
     const handleSignout = async (e) => {
         try {
 
-            const response = await axios.get('http://localhost:5000/api/v1/auth/logout');
+            const response = await axios.get('https://paladins-hry5.onrender.com/api/v1/auth/logout');
             const data = await response.data;
             console.log(data);
 
